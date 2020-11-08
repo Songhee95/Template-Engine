@@ -74,6 +74,14 @@ const userOfficeNumber = [
 
 const teamMember = [];
 
+function repeat(add, response){
+    if(add.more ===true){
+        userInput();
+    }else{
+        console.log(response);
+    }
+}
+
 function userInput() {
     inquirer
     .prompt(questions)
@@ -85,11 +93,7 @@ function userInput() {
                 response.github = add.specific;
                 teamMember.push(response);
                 const forEngineer = new Engineer(response.names, response.id, response.email, response.github);
-            if(add.more ===true){
-                userInput();
-            }else{
-                console.log(forEngineer);
-            }
+                repeat(add,response);
             });
         }else if(response.role==='Intern'){
             inquirer
@@ -98,11 +102,7 @@ function userInput() {
                 response.school = add.specific;
                 teamMember.push(response);
                 const forIntern = new Intern(response.names, response.id, response.email, response.school);
-                if(add.more ===true){
-                    userInput();
-                }else{
-                    console.log(forIntern);
-                }
+                repeat(add, response);
             })
         }else{
             inquirer
@@ -111,11 +111,7 @@ function userInput() {
                 response.officeNumber = add.specific;
                 teamMember.push(response);
                 const forManager = new Manager(response.names, response.id, response.email, response.officeNumber);
-                if(add.more === true){
-                    userInput();
-                }else{
-                    console.log(forManager);
-                }
+                repeat(add, response);
             })
         }
     })
