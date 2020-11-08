@@ -13,7 +13,7 @@ const render = require("./lib/htmlRenderer");
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-const userInput = inquirer.prompt([
+const questions = [
     {
         type: "input",
         name: "names",
@@ -35,46 +35,89 @@ const userInput = inquirer.prompt([
         name: "id",
         message: "Enter your ID number: ",
     }
-]);
+];
+
+const userGithub = [{
+        type:"input",
+        name: "specific",
+        message:"what is your Github Id?: "
+    },
+    {
+        type:"confirm",
+        name:"more",
+        message:"Do you have more team member?: "
+    }
+];
+const userSchool =[
+    {
+        type:"input",
+        name: "specific",
+        message:"what is your school Name?: "
+    },
+    {
+        type:"confirm",
+        name:"more",
+        message:"Do you have more team member?: "
+    }
+];
+const userOfficeNumber = [
+    {
+        type:"input",
+        name: "specific",
+        message:"what is your Office Number?: "
+    }
+];
 
 const teamMember = [];
 
-userInput
-.then((response) => {
-   switch(response.role){
-       case "Engineer":
-            const userGithub = inquirer.prompt([
-                {
-                    type:"input",
-                    name: "specific",
-                    message:"what is your Github Id?: "
+function userInput() {
+    inquirer
+    .prompt(questions)
+    .then((response) => {
+        if(response.role==='Engineer'){
+            inquirer
+            .prompt(userGithub)
+            .then((add) => {
+                response.specific = add.specific;
+                teamMember.push(response);
+            if(add.more ===true){
+                userInput();
+            }else{
+                console.log(teamMember);
+                return teamMember;
+            }
+            });
+        }else if(response.role==='Intern'){
+            inquirer
+            .prompt(userSchool)
+            .then((add) => {
+                response.specific = add.specific;
+                teamMember.push(response);
+                if(add.more ===true){
+                    userInput();
+                }else{
+                    console.log(teamMember);
+                    return teamMember;
                 }
-            ])
-            userGithub.then(add => teamMember.push(add));
-        break;
-       case "Intern":
-           const userSchool = inquirer.prompt([
-                {
-                    type:"input",
-                    name: "specific",
-                    message:"what is your school Name?: "
+            })
+        }else{
+            inquirer
+            .prompt(userOfficeNumber)
+            .then((add) => {
+                response.specific = add.specific;
+                teamMember.push(response);
+                if(add.more === true){
+                    userInput();
+                }else{
+                    console.log(teamMember);
+                    return teamMember;
                 }
-            ])
-            userSchool.then(add =>teamMember.push(add));
-        break;
-       case "Manager":
-            const userOfficeNumber = inquirer.prompt([
-                {
-                    type:"input",
-                    name: "specific",
-                    message:"what is your Office Number?: "
-                }
-            ])
-            userOfficeNumber.then(add => teamMember.push(add));
-        break;
-   }
+            })
+        }
+    })
 }
-)
+userInput();
+
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
