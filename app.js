@@ -25,7 +25,7 @@ const userInput = inquirer.prompt([
         message: "email address: "
     },
     {
-        type:"checkbox",
+        type:"list",
         name: "role",
         message: "What is your role?",
         choices: ["Engineer", "Intern" , "Manager"]
@@ -34,18 +34,48 @@ const userInput = inquirer.prompt([
         type: "input",
         name: "id",
         message: "Enter your ID number: ",
-    },
-    {
-        type: "input",
-        name: 'specific-property',
-        message: "Specific information for your role?"
     }
-])
+]);
+
+const teamMember = [];
+
 userInput
 .then((response) => {
-    console.log(response);
+   switch(response.role){
+       case "Engineer":
+            const userGithub = inquirer.prompt([
+                {
+                    type:"input",
+                    name: "specific",
+                    message:"what is your Github Id?: "
+                }
+            ])
+            userGithub.then(add => teamMember.push(add));
+        break;
+       case "Intern":
+           const userSchool = inquirer.prompt([
+                {
+                    type:"input",
+                    name: "specific",
+                    message:"what is your school Name?: "
+                }
+            ])
+            userSchool.then(add =>teamMember.push(add));
+        break;
+       case "Manager":
+            const userOfficeNumber = inquirer.prompt([
+                {
+                    type:"input",
+                    name: "specific",
+                    message:"what is your Office Number?: "
+                }
+            ])
+            userOfficeNumber.then(add => teamMember.push(add));
+        break;
+   }
 }
 )
+
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
