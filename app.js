@@ -78,7 +78,7 @@ function repeat(add, response){
     if(add.more ===true){
         userInput();
     }else{
-        console.log(response);
+        render(response);
     }
 }
 
@@ -91,9 +91,9 @@ function userInput() {
             .prompt(userGithub)
             .then((add) => {
                 response.github = add.specific;
-                teamMember.push(response);
                 const forEngineer = new Engineer(response.names, response.id, response.email, response.github);
-                repeat(add,response);
+                teamMember.push(forEngineer);
+                repeat(add,teamMember);
             });
         }else if(response.role==='Intern'){
             inquirer
@@ -102,7 +102,8 @@ function userInput() {
                 response.school = add.specific;
                 teamMember.push(response);
                 const forIntern = new Intern(response.names, response.id, response.email, response.school);
-                repeat(add, response);
+                teamMember.push(forIntern);
+                repeat(add,teamMember);
             })
         }else{
             inquirer
@@ -111,7 +112,8 @@ function userInput() {
                 response.officeNumber = add.specific;
                 teamMember.push(response);
                 const forManager = new Manager(response.names, response.id, response.email, response.officeNumber);
-                repeat(add, response);
+                teamMember.push(forManager);
+                repeat(add, teamMember);
             })
         }
     })
