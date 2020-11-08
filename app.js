@@ -10,7 +10,6 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 const questions = [
@@ -65,6 +64,11 @@ const userOfficeNumber = [
         type:"input",
         name: "specific",
         message:"what is your Office Number?: "
+    },
+    {
+        type:"confirm",
+        name:"more",
+        message:"Do you have more team member?: "
     }
 ];
 
@@ -78,39 +82,39 @@ function userInput() {
             inquirer
             .prompt(userGithub)
             .then((add) => {
-                response.specific = add.specific;
+                response.github = add.specific;
                 teamMember.push(response);
+                const forEngineer = new Engineer(response.names, response.id, response.email, response.github);
             if(add.more ===true){
                 userInput();
             }else{
-                console.log(teamMember);
-                return teamMember;
+                console.log(forEngineer);
             }
             });
         }else if(response.role==='Intern'){
             inquirer
             .prompt(userSchool)
             .then((add) => {
-                response.specific = add.specific;
+                response.school = add.specific;
                 teamMember.push(response);
+                const forIntern = new Intern(response.names, response.id, response.email, response.school);
                 if(add.more ===true){
                     userInput();
                 }else{
-                    console.log(teamMember);
-                    return teamMember;
+                    console.log(forIntern);
                 }
             })
         }else{
             inquirer
             .prompt(userOfficeNumber)
             .then((add) => {
-                response.specific = add.specific;
+                response.officeNumber = add.specific;
                 teamMember.push(response);
+                const forManager = new Manager(response.names, response.id, response.email, response.officeNumber);
                 if(add.more === true){
                     userInput();
                 }else{
-                    console.log(teamMember);
-                    return teamMember;
+                    console.log(forManager);
                 }
             })
         }
@@ -129,12 +133,3 @@ userInput();
 // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
 
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
